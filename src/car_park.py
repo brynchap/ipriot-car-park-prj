@@ -2,12 +2,13 @@ from sensor import Sensor
 from display import Display
 
 class CarPark:
-    def __init__(self, location = "Unknown", capacity=0, plates = None, displays = None, sensors = None):
+    def __init__(self, location="Unknown", capacity=0, plates=None, displays=None, sensors=None): #log_file="log.txt"
         self.location = location
         self.capacity = capacity
         self.plates = plates or [] # uses the first value if not None, otherwise uses the second value
         self.displays = displays or []
         self.sensors = sensors or []
+        #self.log_file = log_file
         #self.bays_availability = []
         #self.bays_availability += [True] * self.capacity # if a bay is `True` it means it is available
 
