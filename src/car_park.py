@@ -2,9 +2,10 @@ from sensor import Sensor
 from display import Display
 from pathlib import Path
 from datetime import datetime
+import json
 
 class CarPark:
-    def __init__(self, location="Unknown", capacity=0, plates=None, displays=None, sensors=None, log_file=Path("log.txt")):
+    def __init__(self, location="Unknown", capacity=0, plates=None, displays=None, sensors=None, log_file=Path("log.txt"), config_file=Path("config.json")):
         self.location = location
         self.capacity = capacity
         self.plates = plates or [] # uses the first value if not None, otherwise uses the second value
@@ -12,6 +13,8 @@ class CarPark:
         self.sensors = sensors or []
         self.log_file = log_file if isinstance(log_file, Path) else Path(log_file)
         self.log_file.touch(exist_ok=True)
+        self.config_file = config_file if isinstance(config_file, Path) else Path(config_file)
+        self.config_file.touch(exist_ok=True)
 
     def __str__(self): # `__str__` is used when somebody tries to use the initialised class in string format.
         return f"Car park at {self.location}, with {self.capacity} bays." # EG: `print (carpark1)` Outputs: `Car park at Perth, with 100 bays.`
@@ -49,3 +52,17 @@ class CarPark:
     def _log_car_activity(self, plate, action):
         with self.log_file.open("a") as f:
             f.write(f"{plate} {action} at {datetime.now():%Y-%m-%d %H:%M:%S}\n")
+
+    def write_config(self):
+        with open("config.json", "w") as f:  # TODO: use self.config_file; use Path; add optional parm to __init__
+            # Because JSON is dictionary-like. The `json.dump()` method is used to write the dictionary to the file
+            json.dump({"location": self.location,
+                       "capacity": self.capacity,
+                       "log_file": str(self.log_file)}, f)
+
+    @classmethod
+    def from_config(cls, config_file=Path("config.json")):
+        config_file = config_file if isinstance(config_file, Path) else Path(config_file)
+        with config_file.open() as f:
+            config = json.load(f)
+        return cls(config["location"], config["capacity"], log_file=config["log_file"])
