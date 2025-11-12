@@ -14,7 +14,7 @@ class CarPark:
         self.log_file = log_file if isinstance(log_file, Path) else Path(log_file)
         self.log_file.touch(exist_ok=True)
         self.config_file = config_file if isinstance(config_file, Path) else Path(config_file)
-        self.config_file.touch(exist_ok=True)
+        #self.config_file.touch(exist_ok=True)
 
     def __str__(self): # `__str__` is used when somebody tries to use the initialised class in string format.
         return f"Car park at {self.location}, with {self.capacity} bays." # EG: `print (carpark1)` Outputs: `Car park at Perth, with 100 bays.`
@@ -54,11 +54,9 @@ class CarPark:
             f.write(f"{plate} {action} at {datetime.now():%Y-%m-%d %H:%M:%S}\n")
 
     def write_config(self):
-        with open("config.json", "w") as f:  # TODO: use self.config_file; use Path; add optional parm to __init__
+        with open(self.config_file, "w") as f:  # TODO: use self.config_file; use Path; add optional parm to __init__
             # Because JSON is dictionary-like. The `json.dump()` method is used to write the dictionary to the file
-            json.dump({"location": self.location,
-                       "capacity": self.capacity,
-                       "log_file": str(self.log_file)}, f)
+            json.dump({"location": self.location, "capacity": self.capacity, "log_file": str(self.log_file)}, f)
 
     @classmethod
     def from_config(cls, config_file=Path("config.json")):
