@@ -5,6 +5,15 @@ class Display:
         self.is_on = is_on
 
     def __str__(self):
+        """
+        Returns specific string when called.
+
+        Parameter:
+            self (Display): The current class instance
+
+        Returns:
+            string: A string containing the instance's `id` and `message` values.
+        """
         return f"Display {self.id}: {self.message}"
     
     def update(self, data):
